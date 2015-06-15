@@ -3,6 +3,7 @@
 ## Submission Format
 
     {
+      "version": "1.0",
       "action": {
         "status": "completed",
         "started": "2015-06-03T23:45:20-04:00",
@@ -63,6 +64,7 @@
       },
       "environment": {
         "uuid": "42aac383-cc20-40fe-8285-0401b6a6532b",
+        "cloud": "",
         "provider_type": "gce",
         "region": "us-central-1"
       }
