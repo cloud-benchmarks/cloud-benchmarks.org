@@ -10,6 +10,7 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
 
 requires = [
     'jsonschema',
+    'psycopg2',
     'pyramid',
     'pyramid_mako',
     'pyramid_debugtoolbar',
