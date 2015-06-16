@@ -8,7 +8,7 @@ from base import (
 
 class ViewUnitTests(UnitTestBase):
     def test_post_submission_succeeds(self):
-        """ Make sure we can post a new submission"""
+        """Make sure we can post a new submission"""
         from cloudbenchmarksorg.views import submissions_post
 
         request = testing.DummyRequest(
@@ -19,7 +19,7 @@ class ViewUnitTests(UnitTestBase):
         self.assertEqual(response, {})
 
     def test_post_submission_fails(self):
-        """ Make sure we can't post garbage data as a new submission"""
+        """Make sure we can't post garbage data as a new submission"""
         from cloudbenchmarksorg.views import submissions_post
 
         request = testing.DummyRequest(
@@ -29,10 +29,31 @@ class ViewUnitTests(UnitTestBase):
         response = submissions_post(request)
         self.assertTrue('errors' in response)
 
+    def test_get_submissions_succeeds(self):
+        """Make sure we can get list of new submissions"""
+        from cloudbenchmarksorg.views import submissions_get
+        from cloudbenchmarksorg.db import DB
+
+        # load a test row
+        db = DB()
+        db.create_submission(self.submission_data)
+        db.flush()
+
+        request = testing.DummyRequest()
+        response = submissions_get(request)
+        self.assertEqual(
+            response['submissions_query'].count(),
+            1
+        )
+
 
 class ViewIntegrationTests(IntegrationTestBase):
     def test_post_submission_succeeds(self):
-        """ POST new submission """
+        """ POST new submission
+
+        POST /submissions 200
+
+        """
         from cloudbenchmarksorg import models as M
         self.app.post_json('/submissions', self.submission_data)
 
@@ -40,7 +61,11 @@ class ViewIntegrationTests(IntegrationTestBase):
             self.session.query(M.Submission).count(), 1)
 
     def test_post_submission_fails(self):
-        """ POST invalid submission """
+        """ POST invalid submission
+
+        POST /submissions 400
+
+        """
         from cloudbenchmarksorg import models as M
         res = self.app.post_json('/submissions', {}, status=400)
 

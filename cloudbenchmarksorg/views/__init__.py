@@ -25,3 +25,18 @@ def submissions_post(request):
     db = DB()
     db.create_submission(data)
     return {}
+
+
+@view_config(route_name='submissions', request_method='GET',
+             renderer='submissions/index.mako')
+def submissions_get(request):
+    """List submissions.
+
+    GET /submissions
+
+    """
+    db = DB()
+    submissions_query = db.get_submissions_query()
+    return {
+        'submissions_query': submissions_query,
+    }
