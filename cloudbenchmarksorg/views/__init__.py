@@ -17,7 +17,9 @@ def submissions_post(request):
     if errors:
         request.response.status = 400
         return {
-            "errors": errors,
+            "errors": [
+                e.message for e in errors
+            ],
         }
 
     db = DB()

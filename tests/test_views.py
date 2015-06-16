@@ -31,11 +31,19 @@ class ViewUnitTests(UnitTestBase):
 
 
 class ViewIntegrationTests(IntegrationTestBase):
-    def test_post_submission(self):
+    def test_post_submission_succeeds(self):
         """ POST new submission """
         from cloudbenchmarksorg import models as M
-        res = self.app.post_json('/submissions', self.submission_data)
+        self.app.post_json('/submissions', self.submission_data)
 
-        self.assertEqual(res.status_int, 200)
         self.assertEqual(
             self.session.query(M.Submission).count(), 1)
+
+    def test_post_submission_fails(self):
+        """ POST invalid submission """
+        from cloudbenchmarksorg import models as M
+        res = self.app.post_json('/submissions', {}, status=400)
+
+        self.assertTrue('errors' in res.json)
+        self.assertEqual(
+            self.session.query(M.Submission).count(), 0)
