@@ -17,7 +17,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('ini_file')
     parser.add_argument(
-        '-f', '--force',
+        '-f', '--force', action='store_true',
         help='If tables exist, drop and recreate'
     )
     args = parser.parse_args()
