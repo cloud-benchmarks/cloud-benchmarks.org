@@ -49,10 +49,10 @@
           "cassandra": {
             "charm": "local:trusty/cassandra-5",
             "num_units": 1,
-            "constraints": [
+            "constraints": {
               "arch": x86_64,
               "mem": 512
-            ]
+            }
           }
         },
         "relations": [

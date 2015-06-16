@@ -9,14 +9,17 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
     CHANGES = f.read()
 
 requires = [
+    'jsonschema',
     'pyramid',
-    'pyramid_chameleon',
+    'pyramid_mako',
     'pyramid_debugtoolbar',
     'pyramid_tm',
     'SQLAlchemy',
     'transaction',
     'zope.sqlalchemy',
     'waitress',
+    # test reqs
+    'tox',
     ]
 
 setup(name='cloud-benchmarks.org',
