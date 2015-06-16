@@ -1,8 +1,6 @@
 PROJECT=cloudbenchmarksorg
 
 PYHOME=.venv/bin
-NOSE=$(PYHOME)/nosetests
-FLAKE8=$(PYHOME)/flake8
 PYTHON=$(PYHOME)/python
 
 
@@ -15,6 +13,7 @@ clean:
 
 test: .venv
 	@echo Starting tests...
+	#$(PYHOME)/initializedb test.ini
 	tox
 
 .venv:

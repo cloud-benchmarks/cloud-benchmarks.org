@@ -1,9 +1,12 @@
 from pyramid import testing
 
-from base import UnitTestBase
+from base import (
+    UnitTestBase,
+    IntegrationTestBase,
+)
 
 
-class TestViews(UnitTestBase):
+class ViewUnitTests(UnitTestBase):
     def test_post_submission_succeeds(self):
         """ Make sure we can post a new submission"""
         from cloudbenchmarksorg.views import submissions_post
@@ -25,3 +28,14 @@ class TestViews(UnitTestBase):
 
         response = submissions_post(request)
         self.assertTrue('errors' in response)
+
+
+class ViewIntegrationTests(IntegrationTestBase):
+    def test_post_submission(self):
+        """ POST new submission """
+        from cloudbenchmarksorg import models as M
+        res = self.app.post_json('/submissions', self.submission_data)
+
+        self.assertEqual(res.status_int, 200)
+        self.assertEqual(
+            self.session.query(M.Submission).count(), 1)

@@ -1,40 +1,32 @@
-import os
-import sys
-import transaction
-
-from sqlalchemy import engine_from_config
+import argparse
 
 from pyramid.paster import (
     get_appsettings,
     setup_logging,
-    )
+)
 
-from pyramid.scripts.common import parse_vars
+from sqlalchemy import engine_from_config
 
-from ..models import (
-    DBSession,
-    MyModel,
+from cloudbenchmarksorg.models import (
     Base,
+    DBSession,
+)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('ini_file')
+    parser.add_argument(
+        '-f', '--force',
+        help='If tables exist, drop and recreate'
     )
+    args = parser.parse_args()
 
-
-def usage(argv):
-    cmd = os.path.basename(argv[0])
-    print('usage: %s <config_uri> [var=value]\n'
-          '(example: "%s development.ini")' % (cmd, cmd))
-    sys.exit(1)
-
-
-def main(argv=sys.argv):
-    if len(argv) < 2:
-        usage(argv)
-    config_uri = argv[1]
-    options = parse_vars(argv[2:])
-    setup_logging(config_uri)
-    settings = get_appsettings(config_uri, options=options)
+    setup_logging(args.ini_file)
+    settings = get_appsettings(args.ini_file)
     engine = engine_from_config(settings, 'sqlalchemy.')
+
     DBSession.configure(bind=engine)
+    if args.force:
+        Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
-    with transaction.manager:
-        model = MyModel(name='one', value=1)
-        DBSession.add(model)

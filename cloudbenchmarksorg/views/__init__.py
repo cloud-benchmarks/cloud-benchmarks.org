@@ -1,9 +1,11 @@
 from pyramid.view import view_config
 
 from .. import validators
+from ..db import DB
 
 
-@view_config(route_name='submissions', request_method='POST')
+@view_config(route_name='submissions', request_method='POST',
+             renderer='json')
 def submissions_post(request):
     """Post a new submission.
 
@@ -18,5 +20,6 @@ def submissions_post(request):
             "errors": errors,
         }
 
-    # db.save_submission(data)
+    db = DB()
+    db.create_submission(data)
     return {}

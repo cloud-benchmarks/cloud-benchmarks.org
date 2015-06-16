@@ -6,7 +6,9 @@ from pyramid import testing
 from paste.deploy.loadwsgi import appconfig
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
+from webtest import TestApp
 
+from cloudbenchmarksorg import main
 from cloudbenchmarksorg.models import DBSession
 from cloudbenchmarksorg.models import Base  # base declarative object
 
@@ -49,3 +51,15 @@ class UnitTestBase(BaseTestCase):
     def setUp(self):
         self.config = testing.setUp(request=testing.DummyRequest())
         super(UnitTestBase, self).setUp()
+
+
+class IntegrationTestBase(BaseTestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.app = main({}, **settings)
+        super(IntegrationTestBase, cls).setUpClass()
+
+    def setUp(self):
+        self.app = TestApp(self.app)
+        self.config = testing.setUp()
+        super(IntegrationTestBase, self).setUp()
