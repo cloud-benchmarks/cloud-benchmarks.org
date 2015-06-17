@@ -72,3 +72,13 @@ class ViewIntegrationTests(IntegrationTestBase):
         self.assertTrue('errors' in res.json)
         self.assertEqual(
             self.session.query(M.Submission).count(), 0)
+
+    def test_get_submissions(self):
+        """ GET Submissions list
+
+        GET /submissions 200
+
+        """
+        # load a test submission first
+        self.app.post_json('/submissions', self.submission_data)
+        self.app.get('/submissions')

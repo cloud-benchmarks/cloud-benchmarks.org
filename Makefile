@@ -22,6 +22,12 @@ test: .venv
 	$(PYTHON) setup.py develop
 
 serve: .venv
-	.venv/bin/pserve development.ini
+	.venv/bin/pserve --reload development.ini
+
+sample:
+	@echo Posting sample submission...
+	curl -X POST http://localhost:6543/submissions \
+		-d @./tests/data/submission.json \
+		--header "Content-Type: application/json"
 
 .PHONY: clean

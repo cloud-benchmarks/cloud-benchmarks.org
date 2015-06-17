@@ -1,0 +1,11 @@
+ul.charms {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+ul.charms li {
+  display: inline-block;
+}
+ul.charms li + li:before {
+  content: ", ";
+}
