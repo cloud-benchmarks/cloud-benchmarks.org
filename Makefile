@@ -13,8 +13,7 @@ clean:
 
 test: .venv
 	@echo Starting tests...
-	#$(PYHOME)/initializedb test.ini
-	tox
+	$(PYHOME)/tox
 
 .venv:
 	sudo apt-get install -qy python-virtualenv libpq-dev python-dev
