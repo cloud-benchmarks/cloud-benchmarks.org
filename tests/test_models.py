@@ -11,7 +11,7 @@ class SubmissionTest(UnitTestBase):
 
     def test_cloud_name(self):
         s = self.submission
-        self.assertEqual(s.cloud_name, 'gce:us-central-1')
+        self.assertEqual(s.cloud_name, 'gce-us-central-1')
 
         s.data['environment']['region'] = ''
         self.assertEqual(s.cloud_name, 'gce')

@@ -22,7 +22,7 @@ class Submission(Base):
         if env['cloud']:
             return env['cloud'].lower()
         if env['region']:
-            return '{}:{}'.format(
+            return '{}-{}'.format(
                 env['provider_type'], env['region'])
         return env['provider_type']
 

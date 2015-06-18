@@ -25,7 +25,7 @@
   %for s in submissions_query:
     <tr>
       <td>${s.created_at}</td>
-      <td>${s.cloud_name}</td>
+      <td><a href="/clouds/${s.cloud_name}">${s.cloud_name}</a></td>
       <td>${service_list(s)}</td>
       <td>${format_result(s.result)}</td>
     </tr>
