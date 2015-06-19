@@ -1,9 +1,9 @@
 <%inherit file="../base.mako"/>
 
 <%def name="service_list(submission)">
-  <ul class="charms">
-  %for c in submission.charms(filtered=False):
-    <li><a href="/charms/${c.name}">${c.name} (${c.count})</a></li>
+  <ul class="services">
+  %for c in submission.services(filtered=False):
+    <li><a href="/services/${c.charm_name}">${c.charm_name} (${c.unit_count})</a></li>
   %endfor
   </ul>
 </%def>

@@ -1,11 +1,11 @@
-ul.charms {
+ul.services {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-ul.charms li {
+ul.services li {
   display: inline-block;
 }
-ul.charms li + li:before {
+ul.services li + li:before {
   content: ", ";
 }

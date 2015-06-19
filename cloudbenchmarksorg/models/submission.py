@@ -27,33 +27,36 @@ class Submission(Base):
         return env['provider_type']
 
     @property
-    def services(self):
+    def services_dict(self):
+        """Return the 'services' dict from this submission's bundle.
+
+        """
         return self.data['bundle']['services']
 
-    def charms(self, filtered=False):
-        for s in self.services.values():
-            c = Charm(s)
-            if filtered and c.name in CHARM_BLACKLIST:
+    def services(self, filtered=False):
+        for s in self.services_dict.values():
+            c = Service(s)
+            if filtered and c.charm_name in CHARM_BLACKLIST:
                 continue
-            yield Charm(s)
+            yield Service(s)
 
     @property
     def result(self):
         return self.data['action']['output']['meta']['composite']
 
 
-class Charm(object):
-    def __init__(self, service_dict):
-        self.service_dict = service_dict
-        self.name = self._parse_name()
-        self.count = self._parse_count()
+class Service(object):
+    def __init__(self, data):
+        self.data = data
+        self.charm_name = self._parse_name()
+        self.unit_count = self._parse_count()
 
     def _parse_name(self):
-        charm = self.service_dict['charm']
+        charm = self.data['charm']
         _, charm = charm.rsplit('/', 1)
         charm, _ = charm.rsplit('-', 1)
         return charm
 
     def _parse_count(self):
-        num_units = self.service_dict['num_units']
+        num_units = self.data['num_units']
         return int(num_units)
