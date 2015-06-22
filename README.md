@@ -10,8 +10,7 @@ A Pyramid webapp that displays submitted benchmark results.
 Postgres 9.4 or later is required due to the use of the JSONB datatype.
 You can quickly start up the latest Postgres using Docker:
 
-    sudo docker run -e POSTGRES_PASSWORD="postgres" -p 5432:5432 -d
-postgres
+    sudo docker run -e POSTGRES_PASSWORD="postgres" -p 5432:5432 -d postgres
 
 ### Installing
 
