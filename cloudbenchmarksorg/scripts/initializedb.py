@@ -6,6 +6,10 @@ from pyramid.paster import (
 )
 
 from sqlalchemy import engine_from_config
+from sqlalchemy_utils import (
+    create_database,
+    database_exists,
+)
 
 from cloudbenchmarksorg.models import (
     Base,
@@ -25,6 +29,9 @@ def main():
     setup_logging(args.ini_file)
     settings = get_appsettings(args.ini_file)
     engine = engine_from_config(settings, 'sqlalchemy.')
+
+    if not database_exists(engine.url):
+        create_database(engine.url)
 
     DBSession.configure(bind=engine)
     if args.force:
