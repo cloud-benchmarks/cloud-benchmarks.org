@@ -11,17 +11,33 @@ class DB(object):
     def create_submission(self, data):
         """Create and persist a new Submission.
 
-        Validate ``data`` before calling this method.
+        You should validate ``data`` before calling this method.
 
         """
-        s = M.Submission(data=data)
-        self.session.add(s)
-        return s
+        submission = M.Submission(data=data)
+
+        env_data = data['environment']
+        env = self.get_environment(uuid=env_data.get('uuid'))
+        if not env:
+            env = M.Environment(**env_data)
+
+        submission.environment = env
+        self.session.add(submission)
+        return submission
 
     def get_submissions_query(self):
         """Return query for Submissions.
 
         """
         q = self.session.query(M.Submission) \
-                .order_by(M.Submission.created_at.desc())
+            .order_by(M.Submission.created_at.desc())
         return q
+
+    def get_environment(self, **kw):
+        """Return an Environment that matches the criteria specified
+        by ``**kw``.
+
+        """
+        return self.session.query(M.Environment) \
+            .filter_by(**kw) \
+            .first()

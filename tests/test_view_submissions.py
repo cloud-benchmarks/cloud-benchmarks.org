@@ -6,10 +6,10 @@ from base import (
 )
 
 
-class ViewUnitTests(UnitTestBase):
+class UnitTest(UnitTestBase):
     def test_post_submission_succeeds(self):
         """Make sure we can post a new submission"""
-        from cloudbenchmarksorg.views import submissions_post
+        from cloudbenchmarksorg.views.submissions import submissions_post
 
         request = testing.DummyRequest(
             json_body=self.submission_data
@@ -20,7 +20,7 @@ class ViewUnitTests(UnitTestBase):
 
     def test_post_submission_fails(self):
         """Make sure we can't post garbage data as a new submission"""
-        from cloudbenchmarksorg.views import submissions_post
+        from cloudbenchmarksorg.views.submissions import submissions_post
 
         request = testing.DummyRequest(
             json_body={}
@@ -31,7 +31,7 @@ class ViewUnitTests(UnitTestBase):
 
     def test_get_submissions_succeeds(self):
         """Make sure we can get list of new submissions"""
-        from cloudbenchmarksorg.views import submissions_get
+        from cloudbenchmarksorg.views.submissions import submissions_get
         from cloudbenchmarksorg.db import DB
 
         # load a test row
@@ -47,7 +47,7 @@ class ViewUnitTests(UnitTestBase):
         )
 
 
-class ViewIntegrationTests(IntegrationTestBase):
+class IntegrationTest(IntegrationTestBase):
     def test_post_submission_succeeds(self):
         """ POST new submission
 

@@ -22,7 +22,8 @@ test: .venv
 	$(PYHOME)/pip install -e .
 
 serve: .venv
-	.venv/bin/pserve --reload development.ini
+	$(PYHOME)/initialize_db development.ini
+	$(PYHOME)/pserve --reload development.ini
 
 sample:
 	@echo Posting sample submission...

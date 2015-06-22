@@ -1,7 +1,10 @@
 from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy.orm import relationship
 
 from sqlalchemy import (
     Column,
+    ForeignKey,
+    Integer,
 )
 
 from .base import Base
@@ -14,17 +17,10 @@ CHARM_BLACKLIST = (
 
 
 class Submission(Base):
-    data = Column(JSON)
+    environment_id = Column(Integer, ForeignKey('environment.id'))
 
-    @property
-    def cloud_name(self):
-        env = self.data['environment']
-        if env['cloud']:
-            return env['cloud'].lower()
-        if env['region']:
-            return '{}-{}'.format(
-                env['provider_type'], env['region'])
-        return env['provider_type']
+    data = Column(JSON)
+    environment = relationship('Environment')
 
     @property
     def services_dict(self):
