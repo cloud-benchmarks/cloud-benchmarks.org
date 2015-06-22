@@ -25,12 +25,19 @@ class DB(object):
         self.session.add(submission)
         return submission
 
-    def get_submissions_query(self):
+    def get_submissions_query(self, service=None):
         """Return query for Submissions.
 
+        :param service: Only include submissions that contain this service
+
         """
-        q = self.session.query(M.Submission) \
-            .order_by(M.Submission.created_at.desc())
+        q = self.session.query(M.Submission)
+
+        if service:
+            q = q.filter(
+                M.Submission._service_names.contains([service]))
+
+        q = q.order_by(M.Submission.created_at.desc())
         return q
 
     def get_environment(self, **kw):

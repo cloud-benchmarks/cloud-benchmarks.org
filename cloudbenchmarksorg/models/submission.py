@@ -1,4 +1,4 @@
-from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from sqlalchemy import (
@@ -10,7 +10,7 @@ from sqlalchemy import (
 from .base import Base
 
 
-CHARM_BLACKLIST = (
+FILTERED_CHARMS = (
     'collectd', 'cabs', 'cabs-collector',
     'benchmark-gui', 'siege',
 )
@@ -19,8 +19,15 @@ CHARM_BLACKLIST = (
 class Submission(Base):
     environment_id = Column(Integer, ForeignKey('environment.id'))
 
-    data = Column(JSON)
+    data = Column(JSONB)
+    _service_names = Column(JSONB)
     environment = relationship('Environment')
+
+    def __init__(self, *args, **kw):
+        super(Submission, self).__init__(*args, **kw)
+        # Store parsed service names in a json column
+        # so we can query against it later
+        self._service_names = [s.charm_name for s in self.services()]
 
     @property
     def services_dict(self):
@@ -32,7 +39,7 @@ class Submission(Base):
     def services(self, filtered=False):
         for s in self.services_dict.values():
             c = Service(s)
-            if filtered and c.charm_name in CHARM_BLACKLIST:
+            if filtered and c.charm_name in FILTERED_CHARMS:
                 continue
             yield Service(s)
 

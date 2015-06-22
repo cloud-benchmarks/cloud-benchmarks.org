@@ -1,5 +1,35 @@
 # cloud-benchmarks.org
 
+A Pyramid webapp that displays submitted benchmark results.
+
+
+## Getting Started
+
+### Database Setup
+
+Postgres 9.4 or later is required due to the use of the JSONB datatype.
+You can quickly start up the latest Postgres using Docker:
+
+    sudo docker run -e POSTGRES_PASSWORD="postgres" -p 5432:5432 -d
+postgres
+
+### Installing
+
+    make
+
+### Running Tests
+
+    make test
+
+### Running the web server
+
+    make serve
+
+### Loading a sample submission
+
+    make sample  # web server must be running
+
+
 ## Submission Format
 
     {
@@ -69,3 +99,4 @@
         "region": "us-central-1"
       }
     }
+

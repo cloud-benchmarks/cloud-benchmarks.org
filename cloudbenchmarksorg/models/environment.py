@@ -12,7 +12,7 @@ class Environment(Base):
     provider_type = Column(String)
     region = Column(String)
     cloud = Column(String)
-    name = Column(String)
+    name = Column(String, index=True)
 
     submissions = relationship('Submission')
 
