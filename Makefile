@@ -18,7 +18,8 @@ test: .venv
 .venv:
 	sudo apt-get install -qy python-virtualenv libpq-dev python-dev
 	virtualenv .venv
-	$(PYTHON) setup.py develop
+	$(PYHOME)/pip install -U pip
+	$(PYHOME)/pip install -e .
 
 serve: .venv
 	.venv/bin/pserve --reload development.ini
