@@ -1,3 +1,5 @@
+import responses
+
 from pyramid import testing
 
 from base import (
@@ -56,6 +58,40 @@ class UnitTest(UnitTestBase):
             submission.id
         )
 
+    def test_submission_svg_succeeds(self):
+        """Make sure we can get submission svg"""
+        from cloudbenchmarksorg.models.submission import SVG_URL
+        from cloudbenchmarksorg.views.submissions import submission_svg
+
+        with responses.RequestsMock() as req_mock:
+            svg_data = 'svg data'
+            content_type = 'image/svg+xml'
+            req_mock.add(
+                responses.POST, SVG_URL, body=svg_data,
+                status=406, content_type=content_type,
+            )
+
+            submission = self.load_test_submission()
+            request = testing.DummyRequest()
+
+            # test 404 (unknown submission)
+            request.matchdict['id'] = submission.id + 1
+            response = submission_svg(request)
+            self.assertEqual(404, response.status_code)
+
+            # test 503 (can't get svg)
+            request.matchdict['id'] = submission.id
+            response = submission_svg(request)
+            self.assertEqual(503, response.status_code)
+
+            req_mock.reset()
+            req_mock.add(
+                responses.POST, SVG_URL, body=svg_data,
+                status=200, content_type=content_type,
+            )
+            response = submission_svg(request)
+            self.assertEqual(response.text, svg_data)
+
 
 class IntegrationTest(IntegrationTestBase):
     def test_post_submission_succeeds(self):
@@ -103,3 +139,23 @@ class IntegrationTest(IntegrationTestBase):
         submission = self.load_test_submission()
         self.app.get('/submissions/{}'.format(submission.id))
         self.app.get('/submissions/{}'.format(submission.id + 1), status=404)
+
+    def test_get_submission_svg(self):
+        """ GET Submission svg
+
+        GET /submission/:id/svg 200
+
+        """
+        from cloudbenchmarksorg.models.submission import SVG_URL
+
+        with responses.RequestsMock() as req_mock:
+            svg_data = 'svg data'
+            content_type = 'image/svg+xml'
+            req_mock.add(
+                responses.POST, SVG_URL, body=svg_data,
+                status=200, content_type=content_type,
+            )
+
+            submission = self.load_test_submission()
+            r = self.app.get('/submissions/{}/svg'.format(submission.id))
+            self.assertEqual(r.text, svg_data)

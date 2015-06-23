@@ -15,6 +15,8 @@ requires = [
     'pyramid_mako',
     'pyramid_debugtoolbar',
     'pyramid_tm',
+    'pyyaml',
+    'requests',
     'sqlalchemy',
     'sqlalchemy-utils',
     'transaction',

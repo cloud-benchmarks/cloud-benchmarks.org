@@ -1,3 +1,5 @@
+import responses
+
 from base import (
     UnitTestBase,
 )
@@ -26,6 +28,29 @@ class SubmissionTest(UnitTestBase):
         self.assertEqual(len(services), 1)
         self.assertEqual(services[0].charm_name, 'cassandra')
         self.assertEqual(services[0].unit_count, 1)
+
+    def test_svg(self):
+        from cloudbenchmarksorg.models.submission import SVG_URL
+        with responses.RequestsMock() as req_mock:
+            svg_data = 'svg data'
+            content_type = 'image/svg+xml'
+
+            req_mock.add(
+                responses.POST, SVG_URL, body=svg_data,
+                status=406, content_type=content_type,
+            )
+            self.assertIsNone(self.submission.svg)
+
+            req_mock.reset()
+            req_mock.add(
+                responses.POST, SVG_URL, body=svg_data,
+                status=200, content_type=content_type,
+            )
+            self.assertEqual(self.submission.svg, svg_data)
+            # access again, make sure cached copy is used
+            # (no second request)
+            self.assertEqual(self.submission.svg, svg_data)
+            self.assertEqual(len(req_mock.calls), 1)
 
 
 class EnvironmentTest(UnitTestBase):

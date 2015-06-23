@@ -1,6 +1,8 @@
 from pyramid.httpexceptions import (
     HTTPNotFound,
+    HTTPServiceUnavailable,
 )
+from pyramid.response import Response
 from pyramid.view import view_config
 
 from .. import validators
@@ -48,7 +50,7 @@ def submissions_get(request):
 @view_config(route_name='submission', request_method='GET',
              renderer='submissions/show.mako')
 def submission_show(request):
-    """Show a submission.
+    """Show a submission detail page.
 
     GET /submissions/:id
 
@@ -63,3 +65,26 @@ def submission_show(request):
     return {
         'submission': submission,
     }
+
+
+@view_config(route_name='submission_svg')
+def submission_svg(request):
+    """Return svg data for a submission.
+
+    GET /submissions/:id/svg
+
+    """
+    submission_id = request.matchdict['id']
+
+    db = DB()
+    submission = db.get_submission(submission_id)
+
+    if not submission:
+        return HTTPNotFound()
+
+    if not submission.svg:
+        return HTTPServiceUnavailable("Unable to retrieve svg")
+
+    return Response(
+        body=submission.svg, charset='utf-8',
+        content_type='image/svg+xml')

@@ -26,7 +26,7 @@
       <td>${s.created_at}</td>
       <td><a href="/environments/${s.environment.name}">${s.environment.name}</a></td>
       <td>${service_list(s)}</td>
-      <td>${format_result(s.result)}</td>
+      <td><a href="/submissions/${s.id}">${format_result(s.result)}</a></td>
     </tr>
   %endfor
   </tbody>
