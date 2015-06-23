@@ -9,6 +9,7 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
     CHANGES = f.read()
 
 requires = [
+    'cached_property',
     'jsonschema',
     'psycopg2',
     'pyramid',

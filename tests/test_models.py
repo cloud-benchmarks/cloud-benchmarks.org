@@ -11,10 +11,6 @@ class SubmissionTest(UnitTestBase):
         super(SubmissionTest, self).setUp()
         self.submission = M.Submission(data=self.submission_data)
 
-    def test_services_dict(self):
-        s = self.submission
-        self.assertEqual(s.services_dict, s.data['bundle']['services'])
-
     def test_services(self):
         s = self.submission
 

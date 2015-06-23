@@ -1,5 +1,6 @@
 import logging
 
+from cached_property import cached_property
 import requests
 import yaml
 
@@ -39,19 +40,29 @@ class Submission(Base):
         # so we can query against it later
         self._service_names = [s.charm_name for s in self.services()]
 
+    @cached_property
+    def bundle(self):
+        """Return bundle for this Submission, as a dict.
+
+        """
+        return dict(bundle=self.data['bundle'])
+
+    @cached_property
+    def bundle_yaml(self):
+        """Return bundle for this Submission, as yaml.
+
+        """
+        return yaml.safe_dump(self.bundle, default_flow_style=False)
+
     @property
     def result(self):
         return self.data['action']['output']['meta']['composite']
 
-    @property
-    def services_dict(self):
-        """Return the 'services' dict from this submission's bundle.
+    def services(self, filtered=False):
+        """Yield a Service object for each service in self.bundle
 
         """
-        return self.data['bundle']['services']
-
-    def services(self, filtered=False):
-        for s in self.services_dict.values():
+        for s in self.bundle['bundle']['services'].values():
             c = Service(s)
             if filtered and c.charm_name in FILTERED_CHARMS:
                 continue
@@ -59,17 +70,13 @@ class Submission(Base):
 
     @property
     def svg(self):
-        """Return svg data for this Submission's bundle.
+        """Return svg data for self.bundle
 
         """
         if self._svg:
             return self._svg
 
-        r = requests.post(
-            SVG_URL,
-            yaml.safe_dump(
-                dict(bundle=self.data['bundle']),
-                default_flow_style=False))
+        r = requests.post(SVG_URL, self.bundle_yaml)
         try:
             r.raise_for_status()
         except Exception as e:

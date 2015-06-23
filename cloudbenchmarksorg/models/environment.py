@@ -14,7 +14,8 @@ class Environment(Base):
     cloud = Column(String)
     name = Column(String, index=True)
 
-    submissions = relationship('Submission')
+    submissions = relationship(
+        'Submission', order_by="desc(Submission.created_at)")
 
     def __init__(self, **kw):
         super(Environment, self).__init__(**kw)
