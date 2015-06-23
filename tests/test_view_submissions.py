@@ -32,18 +32,28 @@ class UnitTest(UnitTestBase):
     def test_get_submissions_succeeds(self):
         """Make sure we can get list of new submissions"""
         from cloudbenchmarksorg.views.submissions import submissions_get
-        from cloudbenchmarksorg.db import DB
 
-        # load a test row
-        db = DB()
-        db.create_submission(self.submission_data)
-        db.flush()
+        self.load_test_submission()
 
         request = testing.DummyRequest()
         response = submissions_get(request)
         self.assertEqual(
             response['submissions_query'].count(),
             1
+        )
+
+    def test_show_submission_succeeds(self):
+        """Make sure we can get list of new submissions"""
+        from cloudbenchmarksorg.views.submissions import submission_show
+
+        submission = self.load_test_submission()
+
+        request = testing.DummyRequest()
+        request.matchdict['id'] = submission.id
+        response = submission_show(request)
+        self.assertEqual(
+            response['submission'].id,
+            submission.id
         )
 
 
@@ -82,3 +92,14 @@ class IntegrationTest(IntegrationTestBase):
         # load a test submission first
         self.app.post_json('/submissions', self.submission_data)
         self.app.get('/submissions')
+
+    def test_show_submission(self):
+        """ GET Submission
+
+        GET /submission/:id 200
+
+        """
+        # load a test submission first
+        submission = self.load_test_submission()
+        self.app.get('/submissions/{}'.format(submission.id))
+        self.app.get('/submissions/{}'.format(submission.id + 1), status=404)

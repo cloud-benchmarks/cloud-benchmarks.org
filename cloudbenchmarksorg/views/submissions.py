@@ -1,3 +1,6 @@
+from pyramid.httpexceptions import (
+    HTTPNotFound,
+)
 from pyramid.view import view_config
 
 from .. import validators
@@ -39,4 +42,24 @@ def submissions_get(request):
     submissions_query = db.get_submissions_query()
     return {
         'submissions_query': submissions_query,
+    }
+
+
+@view_config(route_name='submission', request_method='GET',
+             renderer='submissions/show.mako')
+def submission_show(request):
+    """Show a submission.
+
+    GET /submissions/:id
+
+    """
+    submission_id = request.matchdict['id']
+
+    db = DB()
+    submission = db.get_submission(submission_id)
+    if not submission:
+        return HTTPNotFound()
+
+    return {
+        'submission': submission,
     }

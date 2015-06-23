@@ -46,6 +46,13 @@ class BaseTestCase(unittest.TestCase):
         self.trans.rollback()
         self.session.close()
 
+    def load_test_submission(self):
+        from cloudbenchmarksorg.db import DB
+        db = DB()
+        submission = db.create_submission(self.submission_data)
+        db.flush()
+        return submission
+
 
 class UnitTestBase(BaseTestCase):
     def setUp(self):

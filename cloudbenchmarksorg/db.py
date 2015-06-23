@@ -25,6 +25,12 @@ class DB(object):
         self.session.add(submission)
         return submission
 
+    def get_submission(self, id_):
+        """Fetch a single Submission by id.
+
+        """
+        return self.session.query(M.Submission).get(int(id_))
+
     def get_submissions_query(self, service=None):
         """Return query for Submissions.
 
