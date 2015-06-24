@@ -55,8 +55,16 @@ class Submission(Base):
         return yaml.safe_dump(self.bundle, default_flow_style=False)
 
     @property
+    def parameters(self):
+        return self.data['action']['action']['parameters']
+
+    @property
     def result(self):
         return self.data['action']['output']['meta']['composite']
+
+    @property
+    def results(self):
+        return self.data['action']['output']['results']
 
     def services(self, filtered=False):
         """Yield a Service object for each service in self.bundle

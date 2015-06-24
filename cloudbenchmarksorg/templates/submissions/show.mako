@@ -3,3 +3,5 @@
 
 ${submission.svg | n}
 <pre>${submission.bundle_yaml}</pre>
+${lib.keyval_table(submission.results.items(), caption='Results')}
+${lib.keyval_table(submission.parameters.items(), caption='Parameters')}
