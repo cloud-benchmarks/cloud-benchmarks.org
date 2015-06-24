@@ -29,7 +29,15 @@ You can quickly start up the latest Postgres using Docker:
     make sample  # web server must be running
 
 
-## Submission Format
+## Submitting Benchmark Results
+
+Submit benchmark results by posting json to the api:
+
+    curl -X POST http://localhost:6543/submissions \
+      -d @./tests/data/submission.json \
+      --header "Content-Type: application/json"
+
+The json must adhere to the following format:
 
     {
       "version": "1.0",
