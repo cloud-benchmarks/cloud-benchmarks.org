@@ -76,6 +76,19 @@ class Submission(Base):
                 continue
             yield Service(s)
 
+    @cached_property
+    def summary(self):
+        action = self.data['action']
+        d = {
+            k: action[k]
+            for k in ('status', 'started', 'completed')
+        }
+        d.update({
+            k: action['action'][k]
+            for k in ('tag', 'name', 'receiver')
+        })
+        return d
+
     @property
     def svg(self):
         """Return svg data for self.bundle
