@@ -22,7 +22,7 @@ You can quickly start up the latest Postgres using Docker:
 
 ### Running the web server
 
-    make serve
+    make serve  # http://localhost:6543
 
 ### Loading a sample submission
 

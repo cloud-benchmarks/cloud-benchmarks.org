@@ -79,7 +79,10 @@ class Submission(Base):
     @cached_property
     def summary(self):
         action = self.data['action']
-        d = dict(environment=self.environment.name)
+        d = {
+            'environment': self.environment.name,
+            'result': self.result,
+        }
         d.update({
             k: action[k]
             for k in ('status', 'started', 'completed')
