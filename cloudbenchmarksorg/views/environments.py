@@ -1,3 +1,4 @@
+from pyramid.httpexceptions import HTTPNotFound
 from pyramid.view import view_config
 
 from ..db import DB
@@ -14,7 +15,15 @@ def environments_show(request):
     env_name = request.matchdict['name']
 
     db = DB()
+    # Query by calculated name first, then by provider_type if
+    # we didn't get a match
     environment = db.get_environment(name=env_name)
+    if not environment:
+        environment = db.get_environment(provider_type=env_name)
+
+    if not environment:
+        return HTTPNotFound()
+
     submissions = db.get_submissions_query(environment_id=environment.id)
     return {
         'environment': environment,

@@ -14,6 +14,14 @@
   %endif
 </%def>
 
+<%def name="environment_link(env)">
+  %if env.region:
+    <a href="/environments/${env.provider_type}">${env.provider_type}</a>:<a href="/environments/${env.name}">${env.region}</a>
+  %else:
+    <a href="/environments/${env.name}">${env.name}</a>
+  %endif
+</%def>
+
 <%def name="submissions_table(submissions_query)">
 <table class="table">
   <thead>
@@ -30,7 +38,7 @@
   %for s, a_rank, d_rank in submissions_query:
     <tr>
       <td>${s.created_at}</td>
-      <td><a href="/environments/${s.environment.name}">${s.environment.name}</a></td>
+      <td>${environment_link(s.environment)}</td>
       <td>${service_list(s)}</td>
       <td><a href="/submissions/${s.id}">${format_result(s.result)}</a></td>
       <td>${s.benchmark_name}</td>

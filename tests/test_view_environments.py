@@ -17,8 +17,18 @@ class UnitTest(UnitTestBase):
         submission = db.create_submission(self.submission_data)
         db.flush()
 
+        # query by calculated env name
         request = testing.DummyRequest()
         request.matchdict['name'] = submission.environment.name
+        response = environments_show(request)
+        self.assertEqual(
+            response['environment'].uuid,
+            submission.environment.uuid
+        )
+
+        # query by provider_type
+        request = testing.DummyRequest()
+        request.matchdict['name'] = submission.environment.provider_type
         response = environments_show(request)
         self.assertEqual(
             response['environment'].uuid,
