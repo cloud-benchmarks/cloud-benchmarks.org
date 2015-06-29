@@ -14,13 +14,13 @@ class SubmissionTest(UnitTestBase):
     def test_services(self):
         s = self.submission
 
-        services = sorted(list(s.services()), key=lambda x: x.charm_name)
-        self.assertEqual(services[0].charm_name, 'cabs-collector')
-        self.assertEqual(services[0].unit_count, 0)
-        self.assertEqual(services[1].charm_name, 'cassandra')
-        self.assertEqual(services[1].unit_count, 1)
+        services = s.services()
+        service_names = sorted(services.keys())
+        self.assertEqual(service_names, ['cabs-collector', 'cassandra'])
+        self.assertEqual(services['cabs-collector'].unit_count, 0)
+        self.assertEqual(services['cassandra'].unit_count, 1)
 
-        services = list(s.services(filtered=True))
+        services = list(s.services(filtered=True).values())
         self.assertEqual(len(services), 1)
         self.assertEqual(services[0].charm_name, 'cassandra')
         self.assertEqual(services[0].unit_count, 1)

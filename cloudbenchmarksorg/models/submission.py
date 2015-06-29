@@ -11,6 +11,7 @@ from sqlalchemy import (
     Column,
     ForeignKey,
     Integer,
+    Float,
     String,
 )
 
@@ -30,15 +31,30 @@ class Submission(Base):
     environment_id = Column(Integer, ForeignKey('environment.id'))
 
     data = Column(JSONB)
+    _result_value = Column(Float)
     _svg = Column(String)
     _service_names = Column(JSONB)
+    benchmark_name = Column(String)
     environment = relationship('Environment')
 
     def __init__(self, *args, **kw):
         super(Submission, self).__init__(*args, **kw)
         # Store parsed service names in a json column
         # so we can query against it later
-        self._service_names = [s.charm_name for s in self.services()]
+        try:
+            self._result_value = float(self.result['value'])
+        except ValueError:
+            pass
+        self._service_names = [s.charm_name for s in self.services().values()]
+        self.benchmark_name = self._parse_benchmark_name()
+
+    def _parse_benchmark_name(self):
+        action = self.data['action']['action']
+        receiver = action['receiver']
+        action_name = action['name']
+        service_name = '-'.join(receiver.split('-')[1:-1])
+        charm_name = self.services()[service_name].charm_name
+        return '{}:{}'.format(charm_name, action_name)
 
     @cached_property
     def bundle(self):
@@ -67,14 +83,16 @@ class Submission(Base):
         return self.data['action']['output']['results']
 
     def services(self, filtered=False):
-        """Yield a Service object for each service in self.bundle
+        """Yield a dict of service_name:Service for each service in self.bundle
 
         """
-        for s in self.bundle['bundle']['services'].values():
-            c = Service(s)
-            if filtered and c.charm_name in FILTERED_CHARMS:
+        d = {}
+        for name, data in self.bundle['bundle']['services'].items():
+            s = Service(data)
+            if filtered and s.charm_name in FILTERED_CHARMS:
                 continue
-            yield Service(s)
+            d[name] = s
+        return d
 
     @cached_property
     def summary(self):

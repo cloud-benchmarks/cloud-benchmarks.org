@@ -15,6 +15,8 @@ def environments_show(request):
 
     db = DB()
     environment = db.get_environment(name=env_name)
+    submissions = db.get_submissions_query(environment_id=environment.id)
     return {
         'environment': environment,
+        'submissions': submissions,
     }

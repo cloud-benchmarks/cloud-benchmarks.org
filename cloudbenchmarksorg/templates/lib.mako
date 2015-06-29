@@ -1,6 +1,6 @@
 <%def name="service_list(submission)">
   <ul class="services">
-  %for c in submission.services(filtered=False):
+  %for c in submission.services().values():
     <li><a href="/services/${c.charm_name}">${c.charm_name} (${c.unit_count})</a></li>
   %endfor
   </ul>
@@ -14,7 +14,7 @@
   %endif
 </%def>
 
-<%def name="submissions_table(submissions)">
+<%def name="submissions_table(submissions_query)">
 <table class="table">
   <thead>
     <tr>
@@ -22,15 +22,19 @@
       <th>Cloud</th>
       <th>Workload</th>
       <th>Result</th>
+      <th>Benchmark</th>
+      <th>Rank</th>
     </tr>
   </thead>
   <tbody>
-  %for s in submissions:
+  %for s, a_rank, d_rank in submissions_query:
     <tr>
       <td>${s.created_at}</td>
       <td><a href="/environments/${s.environment.name}">${s.environment.name}</a></td>
       <td>${service_list(s)}</td>
       <td><a href="/submissions/${s.id}">${format_result(s.result)}</a></td>
+      <td>${s.benchmark_name}</td>
+      <td>${a_rank if s.result.get('direction', 'asc') == 'asc' else d_rank}</td>
     </tr>
   %endfor
   </tbody>

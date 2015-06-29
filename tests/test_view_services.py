@@ -20,10 +20,10 @@ class UnitTest(UnitTestBase):
         request = testing.DummyRequest()
         request.matchdict['name'] = submission._service_names[0]
         response = services_show(request)
-        self.assertEqual(
-            response['submissions'].first().id,
-            submission.id
-        )
+        submission_result, a_rank, d_rank = response['submissions'].first()
+        self.assertEqual(submission_result.id, submission.id)
+        self.assertEqual(a_rank, 1)
+        self.assertEqual(d_rank, 1)
 
 
 class IntegrationTest(IntegrationTestBase):

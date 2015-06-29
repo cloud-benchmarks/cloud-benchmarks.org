@@ -13,9 +13,12 @@ class DBTest(UnitTestBase):
         db.flush()
 
         q = db.get_submissions_query(service='cassandra')
+        sub, a_rank, d_rank = q.first()
 
         self.assertEqual(q.count(), 1)
-        self.assertEqual(q.first().id, submission.id)
+        self.assertEqual(sub.id, submission.id)
+        self.assertEqual(a_rank, 1)
+        self.assertEqual(d_rank, 1)
 
         q = db.get_submissions_query(service='non-existent')
         self.assertEqual(q.count(), 0)

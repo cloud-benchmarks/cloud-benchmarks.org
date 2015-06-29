@@ -1,3 +1,5 @@
+import sqlalchemy as sa
+
 from . import models as M
 
 
@@ -31,17 +33,34 @@ class DB(object):
         """
         return self.session.query(M.Submission).get(int(id_))
 
-    def get_submissions_query(self, service=None):
-        """Return query for Submissions.
+    def get_submissions_query(self, service=None, environment_id=None):
+        """Return a query result iterable where each result contains:
+
+            (Submission, asc_rank, desc_rank)
+
+        Rankings are among other Submissions with the same benchmark_name.
 
         :param service: Only include submissions that contain this service
+        :param environment_id: Only include submissions for the Environment
+            with this id
 
         """
-        q = self.session.query(M.Submission)
+        q = self.session.query(
+            M.Submission,
+            sa.func.rank().over(
+                partition_by=M.Submission.benchmark_name,
+                order_by=M.Submission._result_value).label('asc_rank'),
+            sa.func.rank().over(
+                partition_by=M.Submission.benchmark_name,
+                order_by=M.Submission._result_value.desc()).label('desc_rank'),
+        )
 
         if service:
             q = q.filter(
                 M.Submission._service_names.contains([service]))
+
+        if environment_id:
+            q = q.filter_by(environment_id=environment_id)
 
         q = q.order_by(M.Submission.created_at.desc())
         return q
