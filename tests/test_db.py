@@ -22,3 +22,19 @@ class DBTest(UnitTestBase):
 
         q = db.get_submissions_query(service='non-existent')
         self.assertEqual(q.count(), 0)
+
+    def test_get_submission_by_tag(self):
+        from cloudbenchmarksorg.db import DB
+
+        # load a test row
+        db = DB()
+        submission = db.create_submission(self.submission_data)
+        db.flush()
+
+        existing = db.get_submission_by_tag(
+            submission.data['action']['action']['tag'])
+
+        self.assertEqual(existing, submission)
+
+        existing = db.get_submission_by_tag('foo')
+        self.assertIsNone(existing)

@@ -3,22 +3,26 @@ import jsonschema
 submission_schema = {
     "definitions": {
         "result": {
-            "type": "object",
-            "properties": {
-                "units": {
-                    "type": "string",
+            "anyOf": [{
+                "type": "object",
+                "properties": {
+                    "units": {
+                        "type": "string",
+                    },
+                    "direction": {
+                        "type": "string",
+                        "default": "asc",
+                    },
+                    "value": {
+                        "type": "string",
+                    },
                 },
-                "direction": {
-                    "type": "string",
-                    "default": "asc",
-                },
-                "value": {
-                    "type": "string",
-                },
-            },
-            "required": [
-                "value",
-            ],
+                "required": [
+                    "value",
+                ],
+            }, {
+                "type": "string",
+            }],
         },
     },
     "type": "object",
@@ -95,7 +99,7 @@ submission_schema = {
                                 "^.*$": {
                                     "$ref": "#/definitions/result"
                                 },
-                            },
+                            }
                         },
                     },
                     "required": [
@@ -131,6 +135,9 @@ submission_schema = {
                                 "constraints": {
                                     "type": "object",
                                 },
+                                "annotations": {
+                                    "type": "object",
+                                },
                             },
                             "required": [
                                 "charm",
@@ -162,13 +169,13 @@ submission_schema = {
                     "type": "string",
                 },
                 "cloud": {
-                    "type": "string",
+                    "type": ["string", "null"],
                 },
                 "provider_type": {
                     "type": "string",
                 },
                 "region": {
-                    "type": "string",
+                    "type": ["string", "null"],
                 },
             },
             "required": [

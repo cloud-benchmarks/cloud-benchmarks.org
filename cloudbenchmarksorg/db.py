@@ -16,6 +16,11 @@ class DB(object):
         You should validate ``data`` before calling this method.
 
         """
+        existing = self.get_submission_by_tag(
+            data['action']['action']['tag'])
+        if existing:
+            return existing
+
         submission = M.Submission(data=data)
 
         env_data = data['environment']
@@ -32,6 +37,15 @@ class DB(object):
 
         """
         return self.session.query(M.Submission).get(int(id_))
+
+    def get_submission_by_tag(self, tag):
+        """Fetch a single Submission by tag.
+
+        """
+        return self.session.query(M.Submission) \
+            .filter(M.Submission.data[(
+                'action', 'action', 'tag')].astext == tag) \
+            .first()
 
     def get_submissions_query(self, service=None, environment_id=None):
         """Return a query result iterable where each result contains:
