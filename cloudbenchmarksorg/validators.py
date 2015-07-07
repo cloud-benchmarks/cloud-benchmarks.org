@@ -103,7 +103,6 @@ submission_schema = {
                         },
                     },
                     "required": [
-                        "meta",
                         "results",
                     ],
                 },

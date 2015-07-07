@@ -37,10 +37,10 @@
   <tbody>
   %for s, a_rank, d_rank in submissions_query:
     <tr>
-      <td>${s.created_at}</td>
+      <td><a href="/submissions/${s.id}">${s.created_at}</a></td>
       <td>${environment_link(s.environment)}</td>
       <td>${service_list(s)}</td>
-      <td><a href="/submissions/${s.id}">${format_result(s.result)}</a></td>
+      <td>${format_result(s.result)}</td>
       <td>${s.benchmark_name}</td>
       <td>${a_rank if s.result.get('direction', 'asc') == 'asc' else d_rank}</td>
     </tr>

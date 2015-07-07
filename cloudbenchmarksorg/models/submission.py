@@ -76,7 +76,10 @@ class Submission(Base):
 
     @property
     def result(self):
-        return self.data['action']['output']['meta']['composite']
+        output = self.data['action']['output']
+        if 'meta' in output:
+            return output['meta']['composite']
+        return dict(value='')
 
     @property
     def results(self):
