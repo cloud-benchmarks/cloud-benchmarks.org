@@ -10,6 +10,17 @@ class DB(object):
     def flush(self):
         self.session.flush()
 
+    def get_services(self):
+        """Return query of distinct services across all submissions.
+
+        """
+        return self.session.query(
+            sa.distinct(
+                sa.func.jsonb_array_elements_text(
+                    M.Submission._service_names)
+            ).label('service')
+        ).order_by('service')
+
     def create_submission(self, data):
         """Create and persist a new Submission.
 
