@@ -50,3 +50,15 @@ class DBTest(UnitTestBase):
         q = db.get_services()
         services = [row.service for row in q]
         self.assertEqual(services, sorted(submission._service_names))
+
+    def test_get_environment_names(self):
+        from cloudbenchmarksorg.db import DB
+
+        # load a test row
+        db = DB()
+        submission = db.create_submission(self.submission_data)
+        db.flush()
+
+        q = db.get_environment_names()
+        names = [row.name for row in q]
+        self.assertEqual(names, [submission.environment.name])

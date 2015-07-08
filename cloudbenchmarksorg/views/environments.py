@@ -4,6 +4,21 @@ from pyramid.view import view_config
 from ..db import DB
 
 
+@view_config(route_name='environments', request_method='GET',
+             renderer='environments/index.mako')
+def environments_index(request):
+    """List all environments.
+
+    GET /environments
+
+    """
+    db = DB()
+    q = db.get_environment_names()
+    return {
+        'environments': q,
+    }
+
+
 @view_config(route_name='environment', request_method='GET',
              renderer='environments/show.mako')
 def environments_show(request):

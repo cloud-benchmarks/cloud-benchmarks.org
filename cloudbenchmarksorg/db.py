@@ -98,3 +98,12 @@ class DB(object):
         return self.session.query(M.Environment) \
             .filter_by(**kw) \
             .first()
+
+    def get_environment_names(self):
+        """Return query of distinct environment names across all
+        submissions.
+
+        """
+        return self.session.query(
+            sa.distinct(M.Environment.name).label('name')
+        ).order_by('name')
