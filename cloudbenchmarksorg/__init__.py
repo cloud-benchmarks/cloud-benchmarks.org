@@ -21,6 +21,7 @@ def main(global_config, **settings):
     config.add_route('submission', '/submissions/{id}')
     config.add_route('submission_svg', '/submissions/{id}/svg')
     config.add_route('environment', '/environments/{name}')
+    config.add_route('services', '/services')
     config.add_route('service', '/services/{name}')
 
     config.scan()
