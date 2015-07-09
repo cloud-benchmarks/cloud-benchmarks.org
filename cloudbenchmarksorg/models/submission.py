@@ -1,5 +1,6 @@
 import logging
 
+import arrow
 from cached_property import cached_property
 import requests
 import yaml
@@ -69,6 +70,10 @@ class Submission(Base):
 
         """
         return yaml.safe_dump(self.bundle, default_flow_style=False)
+
+    @cached_property
+    def human_created_at(self):
+        return arrow.get(self.created_at).humanize()
 
     @property
     def parameters(self):
