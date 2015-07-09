@@ -62,8 +62,10 @@ def submission_show(request):
     if not submission:
         return HTTPNotFound()
 
+    related_submissions = db.get_related_submissions(submission)
     return {
         'submission': submission,
+        'related_submissions': list(related_submissions),
     }
 
 

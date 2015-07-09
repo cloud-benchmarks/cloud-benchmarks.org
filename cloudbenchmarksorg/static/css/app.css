@@ -13,3 +13,9 @@ ul.services li {
 ul.services li + li:before {
   content: ", ";
 }
+.bar, .bar:hover {
+  color: #000;
+}
+.bar p {
+  padding: 5px;
+}

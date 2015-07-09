@@ -62,3 +62,31 @@ class DBTest(UnitTestBase):
         q = db.get_environment_names()
         names = [row.name for row in q]
         self.assertEqual(names, [submission.environment.name])
+
+    def test_get_related_submissions(self):
+        from cloudbenchmarksorg.db import DB
+
+        def make_related_result(env, result):
+            import copy
+            import uuid
+            d = copy.deepcopy(self.submission_data)
+            d['environment']['provider_type'] = env
+            d['environment']['uuid'] = str(uuid.uuid4())
+            d['action']['output']['meta']['composite']['value'] = result
+            d['action']['action']['tag'] = str(uuid.uuid4())
+            return d
+
+        # load test submissions
+        db = DB()
+        submission_gce = db.create_submission(self.submission_data)
+        submission_azure = db.create_submission(
+            make_related_result('azure', 99999.0))
+        submission_ec2 = db.create_submission(
+            make_related_result('ec2', 199999.0))
+        db.flush()
+
+        q = db.get_related_submissions(submission_gce)
+        self.assertEqual(
+            [submission_ec2, submission_azure],
+            list(q)
+        )

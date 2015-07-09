@@ -90,6 +90,35 @@ class DB(object):
         q = q.order_by(M.Submission.created_at.desc())
         return q
 
+    def get_related_submissions(self, submission):
+        """Return query of Submissions related to (same benchmark name),
+        but not including ``submission``.
+
+        """
+        order_by = M.Submission._result_value
+        minmax = sa.func.min
+        if submission.result.get('direction') == 'desc':
+            order_by = order_by.desc()
+            minmax = sa.func.max
+
+        # subquery to get best result per distinct environment name
+        sub = self.session.query(
+            M.Environment.name.label('envname'),
+            minmax(M.Submission._result_value).label('result')) \
+            .filter(M.Submission.environment_id == M.Environment.id) \
+            .filter(M.Submission.benchmark_name == submission.benchmark_name) \
+            .group_by('envname').subquery()
+
+        return self.session.query(M.Submission) \
+                .join(M.Environment,
+                    M.Submission.environment_id == M.Environment.id) \
+                .join(sub, sa.and_(
+                    M.Submission._result_value == sub.c.result,
+                    M.Environment.name == sub.c.envname)) \
+                .filter(M.Submission.id != submission.id) \
+                .filter(M.Submission._result_value != None) \
+                .order_by(order_by)  # noqa
+
     def get_environment(self, **kw):
         """Return an Environment that matches the criteria specified
         by ``**kw``.
