@@ -137,6 +137,8 @@ class IntegrationTest(IntegrationTestBase):
         """
         # load a test submission first
         submission = self.load_test_submission()
+        # avoid http req for svg data
+        submission._svg = 'svg data'
         self.app.get('/submissions/{}'.format(submission.id))
         self.app.get('/submissions/{}'.format(submission.id + 1), status=404)
 

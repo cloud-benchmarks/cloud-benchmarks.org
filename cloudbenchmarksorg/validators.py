@@ -172,6 +172,7 @@ submission_schema = {
                 },
                 "provider_type": {
                     "type": "string",
+                    "pattern": "^(?!local).*$",
                 },
                 "region": {
                     "type": ["string", "null"],
