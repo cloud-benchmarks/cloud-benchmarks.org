@@ -21,7 +21,7 @@ class DB(object):
             ).label('service')
         ).order_by('service')
 
-    def create_submission(self, data):
+    def create_submission(self, data, sanitize=False):
         """Create and persist a new Submission.
 
         You should validate ``data`` before calling this method.
@@ -33,6 +33,8 @@ class DB(object):
             return existing
 
         submission = M.Submission(data=data)
+        if sanitize:
+            submission.sanitize()
 
         env_data = data['environment']
         env = self.get_environment(uuid=env_data.get('uuid'))

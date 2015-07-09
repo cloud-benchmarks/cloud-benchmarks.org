@@ -1,3 +1,4 @@
+import copy
 import json
 import os
 import unittest
@@ -25,7 +26,7 @@ class BaseTestCase(unittest.TestCase):
         # load submission data for use in tests
         here = os.path.dirname(os.path.abspath(__file__))
         with open(os.path.join(here, 'data', 'submission.json')) as f:
-            cls.submission_data = json.load(f)
+            cls.submission_data_original = json.load(f)
 
     def setUp(self):
         connection = self.engine.connect()
@@ -37,6 +38,9 @@ class BaseTestCase(unittest.TestCase):
         DBSession.configure(bind=connection)
         self.session = self.Session(bind=connection)
         Base.session = self.session
+
+        # each test gets its own copy of the data
+        self.submission_data = copy.deepcopy(self.submission_data_original)
 
     def tearDown(self):
         # rollback - everything that happened with the

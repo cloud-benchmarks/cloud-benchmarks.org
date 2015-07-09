@@ -28,7 +28,7 @@ def submissions_post(request):
         }
 
     db = DB()
-    db.create_submission(data)
+    db.create_submission(data, sanitize=True)
     return {}
 
 

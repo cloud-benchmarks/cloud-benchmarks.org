@@ -22,10 +22,10 @@ from .base import Base
 log = logging.getLogger(__name__)
 
 SVG_URL = 'http://svg.juju.solutions'
-FILTERED_CHARMS = (
-    'collectd', 'cabs', 'cabs-collector',
-    'benchmark-gui', 'siege',
-)
+CABS_CHARMS = ['cabs', 'cabs-collector']
+FILTERED_CHARMS = CABS_CHARMS + [
+    'collectd', 'benchmark-gui', 'siege',
+]
 
 
 class Submission(Base):
@@ -87,8 +87,29 @@ class Submission(Base):
         return dict(value='')
 
     @property
+    def relations(self):
+        return self.data['bundle']['relations']
+
+    @property
     def results(self):
         return self.data['action']['output']['results']
+
+    def sanitize(self):
+        """Remove cabs-related charms from the bundle.
+
+        """
+        discard = []
+        for key, svc in self.services().items():
+            if svc.charm_name in CABS_CHARMS:
+                self.data['bundle']['services'].pop(key)
+                discard.append(key)
+
+        if not discard:
+            return
+
+        for a, b in self.data['bundle']['relations'][:]:
+            if a in discard or b in discard:
+                self.data['bundle']['relations'].remove([a, b])
 
     def services(self, filtered=False):
         """Yield a dict of service_name:Service for each service in self.bundle

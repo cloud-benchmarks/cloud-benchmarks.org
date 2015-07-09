@@ -48,6 +48,17 @@ class SubmissionTest(UnitTestBase):
             self.assertEqual(self.submission.svg, svg_data)
             self.assertEqual(len(req_mock.calls), 1)
 
+    def test_sanitize(self):
+        """Test that CABS-related charms are removed
+        from submission bundle.
+
+        """
+        self.submission.sanitize()
+        self.assertEqual(
+            list(self.submission.services().keys()), ['cassandra'])
+        self.assertEqual(
+            self.submission.relations, [])
+
 
 class EnvironmentTest(UnitTestBase):
     def setUp(self):
