@@ -26,22 +26,22 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Date</th>
       <th>Cloud</th>
+      <th>Benchmark</th>
       <th>Workload</th>
       <th>Result</th>
-      <th>Benchmark</th>
+      <th>Date</th>
       <th>Rank</th>
     </tr>
   </thead>
   <tbody>
   %for s, a_rank, d_rank in submissions_query:
     <tr>
-      <td><a href="/submissions/${s.id}">${s.created_at}</a></td>
       <td>${environment_link(s.environment)}</td>
-      <td>${service_list(s)}</td>
-      <td>${format_result(s.result)}</td>
       <td>${s.benchmark_name}</td>
+      <td>${service_list(s)}</td>
+      <td><a href="/submissions/${s.id}">${format_result(s.result)}</a></td>
+      <td><a href="/submissions/${s.id}">${s.created_at}</a></td>
       <td>${a_rank if s.result.get('direction', 'asc') == 'asc' else d_rank}</td>
     </tr>
   %endfor
