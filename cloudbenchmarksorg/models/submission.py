@@ -111,11 +111,11 @@ class Submission(Base):
         }
         d.update({
             k: action[k]
-            for k in ('status', 'started', 'completed')
+            for k in ('started', 'completed')
         })
         d.update({
             k: action['action'][k]
-            for k in ('tag', 'name', 'receiver')
+            for k in ('name',)
         })
         return d
 
