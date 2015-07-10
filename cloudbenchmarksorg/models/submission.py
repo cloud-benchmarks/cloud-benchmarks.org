@@ -88,6 +88,10 @@ class Submission(Base):
     def parameters(self):
         return self.data['action']['action']['parameters']
 
+    def quickstart_cmd(self, request):
+        return 'juju quickstart {}/submissions/{}.yaml'.format(
+            request.host_url, self.id)
+
     @cached_property
     def receiver(self):
         return self.data['action']['action']['receiver']

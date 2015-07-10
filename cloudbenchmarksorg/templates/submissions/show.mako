@@ -9,6 +9,7 @@
   </div>
   <div class="col-md-6">
     <pre>${submission.bundle_yaml}</pre>
+    <pre>${submission.quickstart_cmd(request)}</pre>
   </div>
 </div>
 <div class="row">

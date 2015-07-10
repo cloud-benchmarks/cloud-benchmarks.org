@@ -7,9 +7,8 @@ from base import (
 
 class SubmissionTest(UnitTestBase):
     def setUp(self):
-        from cloudbenchmarksorg import models as M
         super(SubmissionTest, self).setUp()
-        self.submission = M.Submission(data=self.submission_data)
+        self.submission = self.load_test_submission()
 
     def test_services(self):
         s = self.submission
@@ -64,6 +63,16 @@ class SubmissionTest(UnitTestBase):
             self.submission.action_cmd,
             'juju action do cassandra/0 '
             'operations="INSERT" replication-factor="1"'
+        )
+
+    def test_quickstart_cmd(self):
+        class request_mock(object):
+            host_url = 'http://host'
+
+        self.assertEqual(
+            self.submission.quickstart_cmd(request_mock),
+            'juju quickstart http://host/submissions/{}.yaml'.format(
+                self.submission.id)
         )
 
     def test_receiver(self):
