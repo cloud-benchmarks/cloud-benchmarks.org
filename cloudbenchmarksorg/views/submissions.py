@@ -73,7 +73,7 @@ def submission_show(request):
 def submission_svg(request):
     """Return svg data for a submission.
 
-    GET /submissions/:id/svg
+    GET /submissions/:id.svg
 
     """
     submission_id = request.matchdict['id']
@@ -90,3 +90,23 @@ def submission_svg(request):
     return Response(
         body=submission.svg, charset='utf-8',
         content_type='image/svg+xml')
+
+
+@view_config(route_name='submission_yaml')
+def submission_yaml(request):
+    """Return bundle yaml for a submission.
+
+    GET /submissions/:id.yaml
+
+    """
+    submission_id = request.matchdict['id']
+
+    db = DB()
+    submission = db.get_submission(submission_id)
+
+    if not submission:
+        return HTTPNotFound()
+
+    return Response(
+        body=submission.bundle_yaml, charset='utf-8',
+        content_type='text/yaml')

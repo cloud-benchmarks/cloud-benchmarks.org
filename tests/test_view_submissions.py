@@ -92,6 +92,17 @@ class UnitTest(UnitTestBase):
             response = submission_svg(request)
             self.assertEqual(response.text, svg_data)
 
+    def test_submission_yaml(self):
+        """Make sure we can get list of new submissions"""
+        from cloudbenchmarksorg.views.submissions import submission_yaml
+
+        submission = self.load_test_submission()
+
+        request = testing.DummyRequest()
+        request.matchdict['id'] = submission.id
+        response = submission_yaml(request)
+        self.assertEqual(response.text, submission.bundle_yaml)
+
 
 class IntegrationTest(IntegrationTestBase):
     def test_post_submission_succeeds(self):
@@ -145,7 +156,7 @@ class IntegrationTest(IntegrationTestBase):
     def test_get_submission_svg(self):
         """ GET Submission svg
 
-        GET /submission/:id/svg 200
+        GET /submission/:id.svg 200
 
         """
         from cloudbenchmarksorg.models.submission import SVG_URL
@@ -159,5 +170,16 @@ class IntegrationTest(IntegrationTestBase):
             )
 
             submission = self.load_test_submission()
-            r = self.app.get('/submissions/{}/svg'.format(submission.id))
+            r = self.app.get('/submissions/{}.svg'.format(submission.id))
             self.assertEqual(r.text, svg_data)
+
+    def test_get_submission_yaml(self):
+        """ GET Submission yaml
+
+        GET /submission/:id.yaml 200
+
+        """
+        # load a test submission first
+        submission = self.load_test_submission()
+        r = self.app.get('/submissions/{}.yaml'.format(submission.id))
+        self.assertEqual(r.text, submission.bundle_yaml)
