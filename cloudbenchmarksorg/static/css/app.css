@@ -2,6 +2,10 @@ body {
   min-height: 2000px;
   padding-top: 70px;
 }
+svg {
+  max-width: 555px;
+  max-height: 555px;
+}
 ul.services {
   list-style: none;
   margin: 0;
