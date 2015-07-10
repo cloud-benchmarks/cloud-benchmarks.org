@@ -58,6 +58,15 @@ class Submission(Base):
         return '{}:{}'.format(charm_name, action_name)
 
     @cached_property
+    def action_cmd(self):
+        """Return `juju action do` cmd line for this submission.
+
+        """
+        params = ' '.join(['{}="{}"'.format(k, self.parameters[k])
+                           for k in sorted(self.parameters.keys())])
+        return 'juju action do {} {}'.format(self.unit, params)
+
+    @cached_property
     def bundle(self):
         """Return bundle for this Submission, as a dict.
 
@@ -75,9 +84,13 @@ class Submission(Base):
     def human_created_at(self):
         return arrow.get(self.created_at).humanize()
 
-    @property
+    @cached_property
     def parameters(self):
         return self.data['action']['action']['parameters']
+
+    @cached_property
+    def receiver(self):
+        return self.data['action']['action']['receiver']
 
     @property
     def result(self):
@@ -157,6 +170,10 @@ class Submission(Base):
 
         self._svg = r.content.decode('utf-8')
         return self._svg
+
+    @cached_property
+    def unit(self):
+        return '/'.join(self.receiver[len('unit-'):].rsplit('-', 1))
 
 
 class Service(object):

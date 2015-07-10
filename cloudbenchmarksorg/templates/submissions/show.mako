@@ -19,9 +19,11 @@
     ${lib.keyval_table(submission.results.items(), caption='Results')}
   </div>
 </div>
-
-${lib.keyval_table(submission.parameters.items(), caption='Parameters')}
-
+<div class="row">
+  <div class="col-md-12">
+    <pre>${submission.action_cmd}</pre>
+  </div>
+</div>
 
 <div class="row">
   <div class="col-md-6">

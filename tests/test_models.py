@@ -59,6 +59,19 @@ class SubmissionTest(UnitTestBase):
         self.assertEqual(
             self.submission.relations, [])
 
+    def test_action_cmd(self):
+        self.assertEqual(
+            self.submission.action_cmd,
+            'juju action do cassandra/0 '
+            'operations="INSERT" replication-factor="1"'
+        )
+
+    def test_receiver(self):
+        self.assertEqual(self.submission.receiver, 'unit-cassandra-0')
+
+    def test_unit(self):
+        self.assertEqual(self.submission.unit, 'cassandra/0')
+
 
 class EnvironmentTest(UnitTestBase):
     def setUp(self):
