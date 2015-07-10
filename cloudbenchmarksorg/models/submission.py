@@ -90,7 +90,8 @@ class Submission(Base):
 
     def quickstart_cmd(self, request):
         return 'juju quickstart {}/submissions/{}.yaml'.format(
-            request.host_url, self.id)
+            request.registry.settings.get('base_url', request.host_url),
+            self.id)
 
     @cached_property
     def receiver(self):

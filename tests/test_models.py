@@ -66,11 +66,11 @@ class SubmissionTest(UnitTestBase):
         )
 
     def test_quickstart_cmd(self):
-        class request_mock(object):
-            host_url = 'http://host'
+        from pyramid import testing
+        request = testing.DummyRequest(host_url='http://host')
 
         self.assertEqual(
-            self.submission.quickstart_cmd(request_mock),
+            self.submission.quickstart_cmd(request),
             'juju quickstart http://host/submissions/{}.yaml'.format(
                 self.submission.id)
         )
