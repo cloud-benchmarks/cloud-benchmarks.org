@@ -1,3 +1,5 @@
+import json
+
 from pyramid import testing
 
 from base import (
@@ -21,8 +23,9 @@ class UnitTest(UnitTestBase):
         request = testing.DummyRequest()
         request.matchdict['name'] = submission.environment.name
         response = environments_show(request)
+        submissions = json.loads(response['submissions'])
         self.assertEqual(
-            response['environment'].uuid,
+            submissions[0]['environment']['uuid'],
             submission.environment.uuid
         )
 
@@ -30,8 +33,9 @@ class UnitTest(UnitTestBase):
         request = testing.DummyRequest()
         request.matchdict['name'] = submission.environment.provider_type
         response = environments_show(request)
+        submissions = json.loads(response['submissions'])
         self.assertEqual(
-            response['environment'].uuid,
+            submissions[0]['environment']['uuid'],
             submission.environment.uuid
         )
 

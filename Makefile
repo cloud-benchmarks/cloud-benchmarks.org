@@ -7,6 +7,7 @@ PYTHON=$(PYHOME)/python
 all: test
 
 clean:
+	rm -rf $(PROJECT)/static/react/node_modules
 	rm -rf MANIFEST dist/* $(PROJECT).egg-info .coverage
 	find . -name '*.pyc' -delete
 	rm -rf .venv
@@ -24,6 +25,9 @@ test: .venv
 serve: .venv
 	$(PYHOME)/initialize_db development.ini
 	$(PYHOME)/pserve --reload development.ini
+
+npm:
+	cd $(PROJECT)/static/react; npm install
 
 sample:
 	@echo Posting sample submission...

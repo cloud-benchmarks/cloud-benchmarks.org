@@ -1,3 +1,5 @@
+import json
+
 from pyramid import testing
 
 from base import (
@@ -20,10 +22,9 @@ class UnitTest(UnitTestBase):
         request = testing.DummyRequest()
         request.matchdict['name'] = submission._service_names[0]
         response = services_show(request)
-        submission_result, a_rank, d_rank = response['submissions'].first()
-        self.assertEqual(submission_result.id, submission.id)
-        self.assertEqual(a_rank, 1)
-        self.assertEqual(d_rank, 1)
+        submissions = json.loads(response['submissions'])
+        self.assertEqual(submissions[0]['id'], submission.id)
+        self.assertEqual(submissions[0]['rank'], 1)
 
     def test_services_index(self):
         """Test listing all services"""

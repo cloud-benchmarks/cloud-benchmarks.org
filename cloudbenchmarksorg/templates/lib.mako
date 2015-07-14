@@ -22,31 +22,13 @@
   %endif
 </%def>
 
-<%def name="submissions_table(submissions_query)">
-<table class="table">
-  <thead>
-    <tr>
-      <th>Cloud</th>
-      <th>Benchmark</th>
-      <th>Workload</th>
-      <th>Result</th>
-      <th>Date</th>
-      <th>Rank</th>
-    </tr>
-  </thead>
-  <tbody>
-  %for s, a_rank, d_rank in submissions_query:
-    <tr>
-      <td>${environment_link(s.environment)}</td>
-      <td>${s.benchmark_name}</td>
-      <td>${service_list(s)}</td>
-      <td><a href="/submissions/${s.id}">${format_result(s.result)}</a></td>
-      <td><a href="/submissions/${s.id}" title="${s.created_at}">${s.human_created_at}</a></td>
-      <td>${a_rank if s.result.get('direction', 'asc') == 'asc' else d_rank}</td>
-    </tr>
-  %endfor
-  </tbody>
-</table>
+<%def name="submissions_table(data)">
+<div id="submissions"></div>
+<script>
+  window.onload = function() {
+    renderTable(${data | n});
+  };
+</script>
 </%def>
 
 <%def name="keyval_table(pairs, headers=None, caption=None)">

@@ -60,6 +60,18 @@ class DB(object):
                 'action', 'action', 'tag')].astext == tag) \
             .first()
 
+    def get_submissions_json(self, *args, **kw):
+        """Same as `get_submissions_query` but with
+        results as json.
+
+        """
+        results = []
+        for s, asc_rank, desc_rank in self.get_submissions_query(*args, **kw):
+            d = s.to_json()
+            d['rank'] = asc_rank if s.sort_direction == 'asc' else desc_rank
+            results.append(d)
+        return results
+
     def get_submissions_query(self, service=None, environment_id=None):
         """Return a query result iterable where each result contains:
 

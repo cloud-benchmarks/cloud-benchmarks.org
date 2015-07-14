@@ -1,3 +1,5 @@
+import json
+
 from pyramid.httpexceptions import (
     HTTPNotFound,
     HTTPServiceUnavailable,
@@ -41,9 +43,10 @@ def submissions_get(request):
 
     """
     db = DB()
-    submissions_query = db.get_submissions_query()
+    submissions = db.get_submissions_json()
+
     return {
-        'submissions_query': submissions_query,
+        'submissions': json.dumps(submissions),
     }
 
 

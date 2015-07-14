@@ -28,3 +28,12 @@ class Environment(Base):
             return '{}-{}'.format(
                 self.provider_type, self.region)
         return self.provider_type
+
+    def to_json(self):
+        return {
+            'uuid': self.uuid,
+            'provider_type': self.provider_type,
+            'region': self.region,
+            'cloud': self.cloud,
+            'name': self.name,
+        }

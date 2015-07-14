@@ -6,6 +6,9 @@ svg {
   max-width: 555px;
   max-height: 555px;
 }
+.sortable {
+  cursor: pointer;
+}
 ul.services {
   list-style: none;
   margin: 0;

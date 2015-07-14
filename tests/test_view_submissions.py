@@ -1,3 +1,4 @@
+import json
 import responses
 
 from pyramid import testing
@@ -39,10 +40,8 @@ class UnitTest(UnitTestBase):
 
         request = testing.DummyRequest()
         response = submissions_get(request)
-        self.assertEqual(
-            response['submissions_query'].count(),
-            1
-        )
+        submissions = json.loads(response['submissions'])
+        self.assertEqual(len(submissions), 1)
 
     def test_show_submission_succeeds(self):
         """Make sure we can get list of new submissions"""

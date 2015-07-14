@@ -1,3 +1,5 @@
+import json
+
 from pyramid.httpexceptions import HTTPNotFound
 from pyramid.view import view_config
 
@@ -39,8 +41,7 @@ def environments_show(request):
     if not environment:
         return HTTPNotFound()
 
-    submissions = db.get_submissions_query(environment_id=environment.id)
+    submissions = db.get_submissions_json(environment_id=environment.id)
     return {
-        'environment': environment,
-        'submissions': submissions,
+        'submissions': json.dumps(submissions),
     }

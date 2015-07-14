@@ -1,3 +1,5 @@
+import json
+
 from pyramid.view import view_config
 
 from ..db import DB
@@ -29,7 +31,8 @@ def services_show(request):
     service_name = request.matchdict['name']
 
     db = DB()
-    query = db.get_submissions_query(service=service_name)
+    submissions = db.get_submissions_json(service=service_name)
+
     return {
-        'submissions': query,
+        'submissions': json.dumps(submissions),
     }

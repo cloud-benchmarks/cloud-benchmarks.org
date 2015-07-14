@@ -49,6 +49,17 @@ class Submission(Base):
         self._service_names = [s.charm_name for s in self.services().values()]
         self.benchmark_name = self._parse_benchmark_name()
 
+    def to_json(self):
+        d = {
+            'id': self.id,
+            'environment': self.environment.to_json(),
+            'benchmark_name': self.benchmark_name,
+            'services': {k: v.to_json() for k, v in self.services().items()},
+            'result': self.result,
+            'created_at': str(self.created_at),
+        }
+        return d
+
     def _parse_benchmark_name(self):
         action = self.data['action']['action']
         receiver = action['receiver']
@@ -141,6 +152,10 @@ class Submission(Base):
             d[name] = s
         return d
 
+    @property
+    def sort_direction(self):
+        return self.result.get('direction', 'asc')
+
     @cached_property
     def summary(self):
         action = self.data['action']
@@ -196,3 +211,9 @@ class Service(object):
     def _parse_count(self):
         num_units = self.data['num_units']
         return int(num_units)
+
+    def to_json(self):
+        return {
+            'charm_name': self.charm_name,
+            'unit_count': self.unit_count,
+        }
