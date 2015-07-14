@@ -16,7 +16,7 @@ var Table = React.createClass({
     return {
       sortCol: 'Date',
       sortDir: SORT_DESC,
-      sortFunc: (a) => a.started || ''
+      sortFunc: (a) => a.created_at || ''
     }
   },
 

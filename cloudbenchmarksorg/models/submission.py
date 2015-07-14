@@ -45,7 +45,7 @@ class Submission(Base):
         try:
             self._result_value = float(self.result['value'])
         except ValueError:
-            pass
+            self._result_value = None
         self._service_names = [s.charm_name for s in self.services().values()]
         self.benchmark_name = self._parse_benchmark_name()
 
@@ -56,6 +56,7 @@ class Submission(Base):
             'benchmark_name': self.benchmark_name,
             'services': {k: v.to_json() for k, v in self.services().items()},
             'result': self.result,
+            '_result_value': self._result_value,
             'created_at': str(self.created_at),
         }
         return d
