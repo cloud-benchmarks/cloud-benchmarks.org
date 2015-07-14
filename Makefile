@@ -27,7 +27,7 @@ serve: .venv
 
 sample:
 	@echo Posting sample submission...
-	curl -X POST http://localhost:6543/submissions \
+	curl -X POST http://localhost:6542/submissions \
 		-d @./tests/data/submission.json \
 		--header "Content-Type: application/json"
 

@@ -10,7 +10,16 @@ A Pyramid webapp that displays submitted benchmark results.
 Postgres 9.4 or later is required due to the use of the JSONB datatype.
 You can quickly start up the latest Postgres using Docker:
 
-    sudo docker run -e POSTGRES_PASSWORD="postgres" -p 5432:5432 -d postgres
+    # Create a data-only container for postgres data so that our
+    # data is preserved when the postgres container is stopped.
+    # Only need to do this once.
+    sudo docker create -v /var/lib/postgresql/data \
+      --name postgres-data postgres /bin/true
+
+    # Start postgres, telling it to use the data volume from our
+    # postgres-data container.
+    sudo docker run -d --volumes-from postgres-data \
+      -e POSTGRES_PASSWORD="postgres" -p 5432:5432 postgres
 
 ### Installing
 
