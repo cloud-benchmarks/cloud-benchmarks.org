@@ -22,7 +22,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="${active('/')}"><a href="/">Home</a></li>
+            <li><a href="http://blog.cloud-benchmarks.org/about/">About</a></li>
             <li><a href="http://cloud-benchmarks.github.io">Blog</a></li>
             <li class="${active('/submissions')}"><a href="/submissions">Results</a></li>
             <li class="${active('/environments')}"><a href="/environments">Clouds</a></li>
