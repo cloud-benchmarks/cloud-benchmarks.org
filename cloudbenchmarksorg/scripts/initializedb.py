@@ -1,10 +1,12 @@
 import argparse
+import logging
 
 from pyramid.paster import (
     get_appsettings,
     setup_logging,
 )
 
+import sqlalchemy
 from sqlalchemy import engine_from_config
 from sqlalchemy_utils import (
     create_database,
@@ -15,6 +17,8 @@ from cloudbenchmarksorg.models import (
     Base,
     DBSession,
 )
+
+log = logging.getLogger(__name__)
 
 
 def main():
@@ -30,8 +34,11 @@ def main():
     settings = get_appsettings(args.ini_file)
     engine = engine_from_config(settings, 'sqlalchemy.')
 
-    if not database_exists(engine.url):
-        create_database(engine.url)
+    try:
+        if not database_exists(engine.url):
+            create_database(engine.url)
+    except sqlalchemy.exc.OperationalError as e:
+        log.warn("Couldn't create database: %s", e)
 
     DBSession.configure(bind=engine)
     if args.force:
