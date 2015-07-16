@@ -11,4 +11,5 @@ def home(request):
     GET /
 
     """
-    return HTTPFound(location='/submissions')
+    return HTTPFound(
+        location=request.registry.settings['blog_url'])

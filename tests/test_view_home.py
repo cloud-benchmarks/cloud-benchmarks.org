@@ -10,5 +10,4 @@ class IntegrationTest(IntegrationTestBase):
         GET / 301
 
         """
-        r = self.app.get('/', status=302)
-        self.assertTrue(r.location.endswith('/submissions'))
+        self.app.get('/', status=302)
