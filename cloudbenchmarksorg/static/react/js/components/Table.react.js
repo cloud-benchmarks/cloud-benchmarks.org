@@ -49,7 +49,9 @@ var Table = React.createClass({
   _formatCloud: function(env) {
     if (env.region) {
       return (
-        <a href={`/environments/${env.provider_type}`}>{env.region}</a>
+        <span>
+          <a href={`/environments/${env.provider_type}`}>{env.provider_type}</a>:<a href={`/environments/${env.name}`}>{env.region}</a>
+        </span>
       );
     }
     return (
