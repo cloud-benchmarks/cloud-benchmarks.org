@@ -61,7 +61,7 @@ class SubmissionTest(UnitTestBase):
     def test_action_cmd(self):
         self.assertEqual(
             self.submission.action_cmd,
-            'juju action do cassandra/0 '
+            'juju action do cassandra/0 stress '
             'operations="INSERT" replication-factor="1"'
         )
 

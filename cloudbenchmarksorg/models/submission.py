@@ -76,7 +76,8 @@ class Submission(Base):
         """
         params = ' '.join(['{}="{}"'.format(k, self.parameters[k])
                            for k in sorted(self.parameters.keys())])
-        return 'juju action do {} {}'.format(self.unit, params)
+        _, action_name = self.benchmark_name.split(':')
+        return 'juju action do {} {} {}'.format(self.unit, action_name, params)
 
     @cached_property
     def bundle(self):
