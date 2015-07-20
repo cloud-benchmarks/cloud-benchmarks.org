@@ -27,6 +27,7 @@
             <li class="${active('/submissions')}"><a href="/submissions">Results</a></li>
             <li class="${active('/environments')}"><a href="/environments">Clouds</a></li>
             <li class="${active('/services')}"><a href="/services">Workloads</a></li>
+            <li><a href="${request.registry.settings['blog_url']}/about/submit.html">Submit</a></li>
           </ul>
           <!--
           <ul class="nav navbar-nav navbar-right">
