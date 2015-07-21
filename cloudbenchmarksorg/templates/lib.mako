@@ -23,7 +23,9 @@
 </%def>
 
 <%def name="submissions_table(data)">
-<div id="submissions"></div>
+<div id="submissions">
+  <span class="glyphicon glyphicon-refresh spinning"></span>
+</div>
 <script>
   window.onload = function() {
     renderTable(${data | n});
