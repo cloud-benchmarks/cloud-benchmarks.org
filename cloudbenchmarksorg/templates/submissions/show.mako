@@ -5,7 +5,7 @@
 
 <div class="row">
   <div class="col-md-6">
-    ${submission.svg | n}
+    ${submission.svg or '' | n}
   </div>
   <div class="col-md-6">
     <pre>${submission.bundle_yaml}</pre>

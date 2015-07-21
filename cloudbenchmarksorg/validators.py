@@ -137,6 +137,9 @@ submission_schema = {
                                 "annotations": {
                                     "type": "object",
                                 },
+                                "options": {
+                                    "type": "object",
+                                },
                             },
                             "required": [
                                 "charm",
