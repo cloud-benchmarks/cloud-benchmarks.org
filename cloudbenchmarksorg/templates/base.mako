@@ -40,6 +40,9 @@
     <div class="container">
       ${next.body()}
     </div>
+    <footer>
+      <p>an <a href="https://github.com/cloud-benchmarks">open source</a> project &lt3; user contributions licensed <a href="http://creativecommons.org/licenses/by-sa/4.0/">cc by-sa 4.0</a>, attribution required; site design &copy; 2015</p>
+    </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/material.min.js"></script>
