@@ -22,7 +22,9 @@
           "value": "99989.0"
         },
         "start": "2015-06-03T23:45:20Z",
-        "stop": "2015-06-03T23:49:13Z"
+        "stop": "2015-06-03T23:49:13Z",
+        "raw": "raw data here...",
+        "anykey": "arbitrary data stuffed into meta under arbitrary keys..."
       },
       "results": {
         "interval-key-rate": {
